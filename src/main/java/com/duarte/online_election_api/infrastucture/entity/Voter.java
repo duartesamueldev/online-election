@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import javax.annotation.processing.Generated;
 
 @Entity
-@Table(name = "tb_voter")
+@Table(name = "tb_voters")
 public class Voter {
 
     @Id
