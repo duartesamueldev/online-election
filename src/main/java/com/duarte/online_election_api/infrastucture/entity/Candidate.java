@@ -1,6 +1,7 @@
 package com.duarte.online_election_api.infrastucture.entity;
 
 import com.duarte.online_election_api.business.enums.Gender;
+import com.duarte.online_election_api.business.enums.Nationality;
 import com.duarte.online_election_api.business.enums.PoliticalParty;
 import com.duarte.online_election_api.business.enums.Position;
 import jakarta.persistence.*;
@@ -39,6 +40,10 @@ public class Candidate {
     @Column(name = "gender", nullable = false)
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    @Column(name = "nationality", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Nationality nationality;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "political_party", nullable = false)
