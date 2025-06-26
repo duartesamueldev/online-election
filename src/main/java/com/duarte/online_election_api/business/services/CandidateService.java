@@ -6,6 +6,7 @@ import com.duarte.online_election_api.business.enums.Nationality;
 import com.duarte.online_election_api.business.enums.PoliticalParty;
 import com.duarte.online_election_api.business.enums.Position;
 import com.duarte.online_election_api.business.exceptions.CandidateException;
+import com.duarte.online_election_api.business.rules.CandidateRules;
 import com.duarte.online_election_api.infrastucture.entity.Candidate;
 import com.duarte.online_election_api.infrastucture.repository.CandidateRepository;
 import org.springframework.stereotype.Service;
@@ -13,19 +14,22 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 @Service
 public class CandidateService {
 
     private final CandidateRepository candidateRepository;
+    private final CandidateRules candidateRules;
 
     public CandidateService(CandidateRepository candidateRepository){
         this.candidateRepository = candidateRepository;
+        this.candidateRules = new CandidateRules(candidateRepository);
     }
 
     public void saveCandidate(CandidateDTO dto){
 
-        validateBusinessRules(dto);
+        candidateRules.validateCandidate(dto);
 
         Candidate newCandidate = Candidate.builder()
                 .fullName(dto.fullName())
@@ -40,21 +44,5 @@ public class CandidateService {
                 .build();
 
         candidateRepository.saveAndFlush(newCandidate);
-    }
-
-    private void validateBusinessRules(CandidateDTO dto){
-        Position position = Position.valueOf(dto.position().toUpperCase());
-        Nationality nationality = Nationality.valueOf(dto.nationality().toUpperCase());
-        LocalDate birthDate = LocalDate.parse(dto.birthDate());
-
-        if(position == Position.PRESIDENT){
-            long age = ChronoUnit.YEARS.between(birthDate, LocalDate.now());
-            if(age < 38){
-                throw new CandidateException("Candidate must be at least 38 years old to be President.");
-            }
-            if(nationality != Nationality.BRAZILIAN){
-                throw new CandidateException("Candidate must be Brazilian to be President.");
-            }
-        }
     }
 }
