@@ -1,5 +1,6 @@
 package com.duarte.online_election_api.business.exceptions;
 
+import com.duarte.online_election_api.infrastucture.entity.Candidate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -14,6 +15,17 @@ import java.util.*;
 public class GlobalExceptionHandler {
 
     private final Map<String, Object> body = new LinkedHashMap<>();
+
+    @ExceptionHandler(CandidateException.class)
+    public ResponseEntity<Object> handleCandidateException(CandidateException ex){
+
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.UNPROCESSABLE_ENTITY);
+        body.put("error", "Error registering candidate");
+        body.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException ex){

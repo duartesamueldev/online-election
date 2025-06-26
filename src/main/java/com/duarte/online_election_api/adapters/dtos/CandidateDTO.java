@@ -35,8 +35,8 @@ public record CandidateDTO(
         String gender,
 
         @NotBlank(message = "nationality is required")
-        @Pattern(regexp = "BRAZILIAN|FOREIGNER0",
-                message = "Nationality must be one of: Brazilian ,Foreigner",
+        @Pattern(regexp = "BRAZILIAN|FOREIGNER",
+                message = "Nationality must be one of: Brazilian , Foreigner",
                 flags = Pattern.Flag.CASE_INSENSITIVE
         )
         String nationality,
