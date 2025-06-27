@@ -1,9 +1,6 @@
 package com.duarte.online_election_api.infrastucture.entity;
 
-import com.duarte.online_election_api.business.enums.Gender;
-import com.duarte.online_election_api.business.enums.Nationality;
-import com.duarte.online_election_api.business.enums.PoliticalParty;
-import com.duarte.online_election_api.business.enums.Position;
+import com.duarte.online_election_api.business.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -52,5 +49,12 @@ public class Candidate {
     @Enumerated(EnumType.STRING)
     @Column(name = "position", nullable = false)
     private Position position;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private CandidateStatus candidateStatus;
+
+    @Column(name = "ineligibility_reason", nullable = true)
+    private String ineligibilityReason;
 
 }

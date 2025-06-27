@@ -7,17 +7,18 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
-
-    private final Map<String, Object> body = new LinkedHashMap<>();
 
     @ExceptionHandler(CandidateException.class)
     public ResponseEntity<Object> handleCandidateException(CandidateException ex){
+
+        Map<String, Object> body = new LinkedHashMap<>();
 
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.UNPROCESSABLE_ENTITY);
@@ -30,6 +31,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataNotFound.class)
     public ResponseEntity<Object> handleDataNotFound(DataNotFound ex){
 
+        Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.NOT_FOUND);
         body.put("error", "No data found");
@@ -41,6 +43,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException ex){
 
+        Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.UNPROCESSABLE_ENTITY);
         body.put("error", "Validation failed");
