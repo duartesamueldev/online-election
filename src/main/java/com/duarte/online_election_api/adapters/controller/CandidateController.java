@@ -1,13 +1,12 @@
 package com.duarte.online_election_api.adapters.controller;
 
 import com.duarte.online_election_api.adapters.dtos.CandidateDTO;
+import com.duarte.online_election_api.adapters.dtos.CandidateResponseDTO;
 import com.duarte.online_election_api.business.services.CandidateService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/candidate")
@@ -24,5 +23,12 @@ public class CandidateController {
         candidateService.saveCandidate(request);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<CandidateResponseDTO> findByNumber(@RequestParam("number") Integer number){
+        var response = candidateService.findByNumber(number);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
