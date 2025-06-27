@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -38,6 +40,8 @@ public class CandidateRules {
         LocalDate birthDate = LocalDate.parse(dto.birthDate());
         long age = ChronoUnit.YEARS.between(birthDate, LocalDate.now());
 
+        List<String> reasons = new ArrayList<>();
+
         if(age < 18){
             return new CandidateValidationResult(CandidateStatus.DISQUALIFIED,
                     CandidateValidationMessages.TOO_YOUNG);
@@ -45,12 +49,15 @@ public class CandidateRules {
 
         int requiredAge = MINIMUM_AGE_BY_POSITION.get(position);
         if(age < requiredAge){
-            return new CandidateValidationResult(CandidateStatus.DISQUALIFIED,
-                    CandidateValidationMessages.minimumAgeMessage(requiredAge, position));
+            reasons.add(CandidateValidationMessages.minimumAgeMessage(requiredAge, position));
         }
 
         if((position == Position.PRESIDENT || position == Position.SENATOR) && nationality != Nationality.BRAZILIAN){
-            return new CandidateValidationResult(CandidateStatus.DISQUALIFIED, CandidateValidationMessages.NOT_BRAZILIAN);
+           reasons.add(CandidateValidationMessages.NOT_BRAZILIAN);
+        }
+
+        if(!reasons.isEmpty()){
+            return new CandidateValidationResult(CandidateStatus.DISQUALIFIED, String.join("; ", reasons));
         }
 
         return new CandidateValidationResult(CandidateStatus.WAITING, null);

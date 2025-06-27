@@ -1,5 +1,6 @@
 package com.duarte.online_election_api.business.rules;
 
+import com.duarte.online_election_api.business.enums.Nationality;
 import com.duarte.online_election_api.business.enums.Position;
 
 public class CandidateValidationMessages {
